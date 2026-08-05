@@ -72,10 +72,25 @@ exactly the kind of question Assessment 3's reporting will ask.
 
 ## Verification status
 
-Verified so far: `prisma validate` passes, `prisma generate` succeeds, TypeScript and ESLint are
-clean, and `next build` is green.
+Verified against a **real PostgreSQL 18** instance (installed in WSL2 for local development):
 
-**Not yet verified:** the migration and seed have not run against a real Postgres, because there was
-no database available when this was written. `prisma migrate dev --name init` and `npm run db:seed`
-are the first two things to run once one exists. Expected result: 2 feeds, 1 author, 11 posts,
-and citations on 7 of them.
+- `prisma validate`, `prisma generate`, `tsc --noEmit`, `eslint`, `next build` — all clean
+- `prisma migrate dev --name init` — migration generated and applied, database in sync
+- `npm run db:seed` — **2 feeds, 1 author, 11 posts, 10 citations**
+- A relational query (`feed → posts ordered by publishedAt desc → author + citations`) returns:
+  `build-journal` with 6 posts and `research-notes` with 5, correct ordering, author joined,
+  `body` arrays preserved with their original paragraph counts, and images intact
+
+That last check is the one that matters: it proves the ORM, the relations, the array column and
+Assessment 1's real content all survive the round trip.
+
+### Prisma 7 gotchas hit along the way
+
+Recorded so they are not rediscovered on EC2:
+
+1. `new PrismaClient()` with no arguments **does not compile** — Prisma 7 requires a driver adapter.
+2. `url = env("DATABASE_URL")` in `schema.prisma` is a **hard error** in Prisma 7 (P1012): "the
+   datasource property `url` is no longer supported in schema files." It moves to `prisma.config.ts`,
+   and the runtime connection comes from the adapter.
+3. Neither Prisma 7 nor `tsx` auto-loads `.env`, so `prisma/seed.ts` imports `dotenv/config`
+   explicitly. Harmless in Docker, where compose supplies `DATABASE_URL` directly.

@@ -6,6 +6,10 @@
 //
 // Idempotent: re-running upserts rather than duplicating, so it is safe to run
 // on every container start.
+// Prisma 7 no longer auto-loads .env, and tsx does not either — so the seed
+// loads it explicitly. In Docker this is a no-op: compose supplies DATABASE_URL
+// directly and there is no .env file in the image.
+import "dotenv/config";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { PrismaPg } from "@prisma/adapter-pg";

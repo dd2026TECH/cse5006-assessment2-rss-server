@@ -12,11 +12,11 @@ generator client {
   output   = "../app/generated/prisma"
 }
 
+// No `url` here: Prisma 7 removed it from schema files. CLI commands read the
+// connection string from prisma.config.ts, and the runtime client gets it from
+// the PrismaPg driver adapter in lib/prisma.ts. Both read DATABASE_URL.
 datasource db {
   provider = "postgresql"
-  // Read at runtime by the generated client. prisma.config.ts supplies the same
-  // value to CLI commands, which do not auto-load .env in Prisma 7.
-  url      = env("DATABASE_URL")
 }
 
 /// An RSS source. Assessment 1's posts came from two authored feeds
