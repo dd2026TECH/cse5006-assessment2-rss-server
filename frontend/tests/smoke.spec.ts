@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { siteConfig } from "../src/lib/siteConfig";
+import { siteConfig } from "../lib/siteConfig";
 
 test.describe("shell", () => {
   test("home renders header title, footer identity and workflow", async ({
