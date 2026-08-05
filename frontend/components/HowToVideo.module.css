@@ -6,3 +6,9 @@
   background: var(--surface-2);
   aspect-ratio: 16 / 9;
 }
+
+.fallback {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
