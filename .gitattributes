@@ -1,0 +1,14 @@
+# This repo is authored on Windows but every container runs Linux.
+#
+# Without this, git checks these files out with CRLF endings and the container
+# fails at startup with "bad interpreter: /bin/sh^M" — the shebang line ends up
+# containing a carriage return. Forcing LF makes the checkout identical on
+# Windows, on the EC2 instance, and inside the image.
+
+*.sh            text eol=lf
+Dockerfile      text eol=lf
+*.Dockerfile    text eol=lf
+docker-compose.yml text eol=lf
+*.yml           text eol=lf
+*.yaml          text eol=lf
+.dockerignore   text eol=lf
