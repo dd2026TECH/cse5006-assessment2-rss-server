@@ -1,0 +1,21 @@
+# Mirrors .gitignore — keeps the build context small and stops host artefacts
+# (especially node_modules built for a different OS) leaking into the image.
+node_modules
+.next
+out
+build
+coverage
+test-results
+playwright-report
+*.tsbuildinfo
+.env*
+!.env.example
+.git
+.gitignore
+Dockerfile
+.dockerignore
+*.md
+.claude
+.agents
+.windsurf
+skills-lock.json
