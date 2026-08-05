@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { getPosts } from "@/lib/posts";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import FeedsView from "@/components/FeedsView";
@@ -6,23 +7,36 @@ import styles from "./feeds.module.css";
 
 export const metadata: Metadata = {
   title: "Feeds",
-  description: "Browse blog-style sample posts standing in for RSS content.",
+  description: "Live RSS feed items read from the RSS Server's database.",
 };
 
-export default function FeedsPage() {
-  const posts = getPosts();
+// The awaiting part is split into its own component and wrapped in Suspense
+// rather than using a loading.tsx file. A loading.tsx at this segment would
+// also cover /feeds/[slug], and streaming that route sends a 200 header before
+// notFound() runs — which silently breaks the 404 on unknown slugs.
+async function FeedsList() {
+  const posts = await getPosts();
+  return <FeedsView posts={posts} />;
+}
 
+export default function FeedsPage() {
   return (
     <section>
-      <Breadcrumbs
-        items={[{ label: "Home", href: "/" }, { label: "Feeds" }]}
-      />
+      <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Feeds" }]} />
       <h1>Feeds</h1>
       <p className={styles.lede}>
-        Blog-style sample content standing in for RSS feed items until the
-        backend arrives in Assessment 2. Newest first.
+        Live RSS feed items, read from the RSS Server&apos;s database through its
+        API. Newest first.
       </p>
-      <FeedsView posts={posts} />
+      <Suspense
+        fallback={
+          <p className={styles.lede} aria-busy="true">
+            Loading feed items from the RSS Server…
+          </p>
+        }
+      >
+        <FeedsList />
+      </Suspense>
     </section>
   );
 }
