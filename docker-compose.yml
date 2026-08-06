@@ -1,0 +1,57 @@
+# Three services, following the Module 7 lab (Lab 7b): the UI, the API, and a
+# real Postgres instance with a named volume so data survives a restart.
+#
+# Ports match the lab exactly — the frontend is published on 80 and the API on
+# 4080, both mapping to Next.js's 3000 inside the container. The security group
+# on the EC2 instance must allow inbound 80 and 4080.
+#
+#   docker-compose up --build
+#   http://<ec2-public-dns>/          the site
+#   http://<ec2-public-dns>:4080/     the API and its documentation page
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "80:3000"
+    depends_on:
+      - api
+    environment:
+      - NODE_ENV=development
+      # Server components talk to the api container directly over the Docker
+      # network. The browser cannot resolve this name — client-side code derives
+      # its URL from window.location instead (see frontend/lib/apiConfig.ts).
+      - API_INTERNAL_URL=http://api:3000
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules # keeps the image's install, not the host's
+    command: npm run dev
+
+  api:
+    build: ./api
+    ports:
+      - "4080:3000"
+    depends_on:
+      - postgres
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=postgresql://user:password@postgres:5432/mydb
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+      - /app/app/generated # generated Prisma client belongs to the image
+    # entrypoint.sh waits for Postgres, applies migrations, seeds, then serves.
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mydb
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
