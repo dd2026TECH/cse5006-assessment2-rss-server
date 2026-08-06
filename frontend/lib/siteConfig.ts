@@ -16,6 +16,7 @@ export const siteConfig = {
     { href: "/assessment-3", label: "Assessment 3" },
     { href: "/assessment-4", label: "Assessment 4" },
     { href: "/feeds", label: "Feeds" },
+    { href: "/rss-client", label: "RSS Client" },
     { href: "/settings", label: "Settings" },
   ],
 } as const;
