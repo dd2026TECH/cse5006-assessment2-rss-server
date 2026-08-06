@@ -12,11 +12,11 @@ Every example is real code from `app/`.
   A component is just a JavaScript function that returns HTML-like code (called JSX).
 - **Next.js** is a framework around React that adds the missing parts: URLs → pages, a server
   that renders HTML, a build system.
-- Your app is: **a folder of pages** (`src/app/`), **a box of LEGO bricks** (`src/components/`),
-  and **a drawer of data & logic** (`src/lib/`). That's it.
+- Your app is: **a folder of pages** (`app/`), **a box of LEGO bricks** (`components/`),
+  and **a drawer of data & logic** (`lib/`). That's it.
 
 ```
-src/
+frontend/
 ├── app/          ← each folder here IS a page on the site
 ├── components/   ← reusable pieces used by the pages
 └── lib/          ← data and logic (no visuals)
@@ -24,21 +24,21 @@ src/
 
 ## 2. Folders are URLs
 
-Next.js routing rule: **a folder inside `src/app/` containing a `page.tsx` becomes a URL.**
+Next.js routing rule: **a folder inside `app/` containing a `page.tsx` becomes a URL.**
 
 | Folder | URL you type |
 |---|---|
-| `src/app/page.tsx` | `/` (Home) |
-| `src/app/about/page.tsx` | `/about` |
-| `src/app/feeds/page.tsx` | `/feeds` |
-| `src/app/feeds/[slug]/page.tsx` | `/feeds/anything-here` ← brackets = wildcard |
-| `src/app/settings/page.tsx` | `/settings` |
+| `app/page.tsx` | `/` (Home) |
+| `app/about/page.tsx` | `/about` |
+| `app/feeds/page.tsx` | `/feeds` |
+| `app/feeds/[slug]/page.tsx` | `/feeds/anything-here` ← brackets = wildcard |
+| `app/settings/page.tsx` | `/settings` |
 
 No configuration file lists the routes — the folder tree *is* the routing table.
 
 ## 3. What a component looks like
 
-Open [`src/components/Footer.tsx`](src/components/Footer.tsx) — the simplest one:
+Open [`components/Footer.tsx`](components/Footer.tsx) — the simplest one:
 
 ```tsx
 import { siteConfig } from "@/lib/siteConfig";
@@ -68,7 +68,7 @@ Three things to notice — they repeat in every component:
 
 ## 4. layout.tsx — the frame around every page
 
-[`src/app/layout.tsx`](src/app/layout.tsx) wraps **every** page. Whatever page you
+[`app/layout.tsx`](app/layout.tsx) wraps **every** page. Whatever page you
 visit, Next.js renders:
 
 ```tsx
@@ -90,12 +90,12 @@ the header/footer never need to be repeated in any page file.
 Follow the chain (this is the answer to "how does a page get to my screen"):
 
 1. Browser asks the server for `/feeds`.
-2. Next.js finds `src/app/feeds/page.tsx` and **runs it on the server**:
+2. Next.js finds `app/feeds/page.tsx` and **runs it on the server**:
    ```tsx
    const posts = getPosts();          // ← asks lib/posts.ts for the data
    return <FeedsView posts={posts} /> // ← hands the data to a component
    ```
-3. `getPosts()` in [`src/lib/posts.ts`](src/lib/posts.ts) returns the 6 sample posts,
+3. `getPosts()` in [`lib/posts.ts`](lib/posts.ts) returns the 6 sample posts,
    sorted newest first. (In Assessment 2 this same function will query a real database —
    nothing else will change. That's deliberate.)
 4. `FeedsView` receives the posts as a **prop** (a function argument for components) and maps
@@ -115,8 +115,8 @@ component that reacts to the user has `"use client"` as its first line — that 
 
 The theme click, step by step:
 
-1. [`ThemeToggle.tsx`](src/components/ThemeToggle.tsx): `onClick={() => setPreference("dark")}`.
-2. `setPreference` lives in [`ThemeProvider.tsx`](src/components/ThemeProvider.tsx) and does
+1. [`ThemeToggle.tsx`](components/ThemeToggle.tsx): `onClick={() => setPreference("dark")}`.
+2. `setPreference` lives in [`ThemeProvider.tsx`](components/ThemeProvider.tsx) and does
    three writes:
    ```ts
    root.dataset.theme = "dark";              // ① stamps <html data-theme="dark">
@@ -124,7 +124,7 @@ The theme click, step by step:
    document.cookie = "theme=dark; ...";      // ③ remembers it for the SERVER
    ```
 3. Why does ① change the colours? Because **no component contains any colour** — they all use
-   variables like `var(--bg)`. In [`globals.css`](src/app/globals.css):
+   variables like `var(--bg)`. In [`globals.css`](app/globals.css):
    ```css
    :root                    { --bg: #f6f7f9; ... }   /* light values */
    :root[data-theme="dark"] { --bg: #0e1116; ... }   /* dark values  */
@@ -151,7 +151,7 @@ applied by a tiny inline script before first paint — no flash, and the pages s
 ## 7. Story 3 — you click "Read more" (dynamic pages)
 
 There is no file for `/feeds/welcome-to-the-rss-server-project`. Instead there's **one template
-for all posts**: `src/app/feeds/[slug]/page.tsx`. The brackets mean "capture this part of the
+for all posts**: `app/feeds/[slug]/page.tsx`. The brackets mean "capture this part of the
 URL and give it to me":
 
 ```tsx
@@ -176,7 +176,7 @@ When you call `setOpen(true)`, React re-runs the component and updates the scree
 whole trick behind every interaction: **event → set state → React redraws.**
 
 For state that must **survive closing the tab** (theme, card/list layout), the app writes to
-`localStorage` through one shared helper, [`useLocalStorage.ts`](src/lib/useLocalStorage.ts)
+`localStorage` through one shared helper, [`useLocalStorage.ts`](lib/useLocalStorage.ts)
 — written once, reused by the layout toggle and settings.
 
 ## 9. Why it's organised this way (say this in the Q&A)
@@ -194,10 +194,10 @@ For state that must **survive closing the tab** (theme, card/list layout), the a
 
 With `npm run dev` running, make each change, watch the browser, then undo it:
 
-1. **Your name**: edit `src/lib/siteConfig.ts` → footer + About update together.
+1. **Your name**: edit `lib/siteConfig.ts` → footer + About update together.
 2. **A colour**: in `globals.css` change `--accent: #2563eb` to `#e11d48` → every button, link
    and active state changes at once. Now you understand CSS variables.
-3. **A post**: copy one object in `src/lib/posts.ts`, change its `title` and `slug` → a 7th
+3. **A post**: copy one object in `lib/posts.ts`, change its `title` and `slug` → a 7th
    card appears AND `/feeds/your-new-slug` exists. Now you understand dynamic routes.
 4. **Break it**: rename `getPosts` to `getPost` in one place → the build error tells you
    exactly where it's used. Now you understand why TypeScript is on.
@@ -206,7 +206,7 @@ With `npm run dev` running, make each change, watch the browser, then undo it:
 
 ## 11. The one-breath answer (memorise this)
 
-> "It's a Next.js App Router application. Folders under `src/app` are the pages; shared UI like
+> "It's a Next.js App Router application. Folders under `app` are the pages; shared UI like
 > the header, footer and hamburger menu are reusable components; data and logic live in `lib`.
 > Pages render on the server — only interactive pieces run in the browser. Theming is CSS
 > variables switched by a `data-theme` attribute, persisted in a cookie and applied by a tiny
@@ -230,22 +230,25 @@ With `npm run dev` running, make each change, watch the browser, then undo it:
 | **Dynamic route** | `[slug]` folder — one template serving many URLs |
 | **localStorage / cookie** | Browser storage; cookies also travel to the server with requests |
 
-## 13. Everything outside `src/` — the rest of the folder explained
+## 13. Everything outside the code folders — the rest explained
 
-You write code in **three** places: `src/` (the app), `tests/` (the robot-browser tests), and
-`public/` (files served as-is, like the video). Everything else falls into one of three
-categories: **settings**, **generated**, or **bookkeeping** — you rarely touch any of it.
+You write code in **four** places: `app/`, `components/`, `lib/` (the app itself), `tests/` (the
+robot-browser tests), and `public/` (files served as-is, like the video). Everything else falls
+into one of three categories: **settings**, **generated**, or **bookkeeping** — you rarely touch
+any of it.
 
 ```
-app/
-├── src/                  ✍ YOUR CODE — pages, components, lib
+frontend/
+├── app/                  ✍ YOUR CODE — pages (each folder is a URL)
+├── components/           ✍ YOUR CODE — reusable pieces
+├── lib/                  ✍ YOUR CODE — data and logic
 ├── tests/                ✍ Playwright smoke tests (npm test)
 ├── public/               ✍ static files served at the site root
 │   └── videos/              → drop how-to.mp4 here for the About page
 │
 ├── package.json          ⚙ the project manifest (see below — worth understanding)
 ├── package-lock.json     ⚙ exact version of every installed library, for reproducibility
-├── tsconfig.json         ⚙ TypeScript settings — e.g. defines that "@/" means "src/"
+├── tsconfig.json         ⚙ TypeScript settings — e.g. defines that "@/" means the package root
 ├── next.config.ts        ⚙ Next.js settings (currently near-empty defaults)
 ├── eslint.config.mjs     ⚙ code-quality rules that `npm run lint` enforces
 ├── playwright.config.ts  ⚙ how tests run (builds the app, serves it on port 3457)
