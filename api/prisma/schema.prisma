@@ -1,0 +1,105 @@
+// RSS Server schema — CSE5006 Assessment 2
+//
+// Covers Details PDF instruction 1: "RSS feeds, who posted them, dates, blog
+// data, images and links, and any other core fields needed for the project."
+// Field shapes are taken from the real Assessment 1 content so the seed
+// reproduces the existing site rather than inventing demo rows.
+//
+// See SCHEMA_RATIONALE.md for why each model and relation exists.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+// No `url` here: Prisma 7 removed it from schema files. CLI commands read the
+// connection string from prisma.config.ts, and the runtime client gets it from
+// the PrismaPg driver adapter in lib/prisma.ts. Both read DATABASE_URL.
+datasource db {
+  provider = "postgresql"
+}
+
+/// An RSS source. Assessment 1's posts came from two authored feeds
+/// ("Build Journal", "Research Notes"); `url` is null for those and set for
+/// genuinely external feeds the server ingests.
+model Feed {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique
+  name        String
+  url         String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  posts Post[]
+}
+
+/// Who posted an item. Separate from Feed because one person can publish to
+/// several feeds, and the brief names "who posted them" as its own concept.
+model Author {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  email     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  posts Post[]
+}
+
+/// A single article. `body` is a string array because Assessment 1 stores
+/// paragraphs that way and Postgres supports it natively — no join table and
+/// no re-splitting a blob on read.
+model Post {
+  id          Int      @id @default(autoincrement())
+  slug        String   @unique
+  title       String
+  summary     String
+  body        String[]
+  imageUrl    String?
+  imageAlt    String?
+  link        String?
+  category    String?
+  publishedAt DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  feedId Int
+  feed   Feed @relation(fields: [feedId], references: [id], onDelete: Cascade)
+
+  authorId Int
+  author   Author @relation(fields: [authorId], references: [id])
+
+  citations Citation[]
+
+  @@index([feedId])
+  @@index([authorId])
+  @@index([publishedAt])
+}
+
+/// Assessment 1's research posts cite real sources inline. Kept as a related
+/// table rather than a JSON blob so citations stay queryable.
+model Citation {
+  id   Int    @id @default(autoincrement())
+  text String
+  href String
+
+  postId Int
+  post   Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  @@index([postId])
+}
+
+/// Persisted request history. Backs /api/count and /api/stats so the counter
+/// survives a restart instead of living in memory — and it is the metrics
+/// foundation Assessment 3's dashboards and alerts will read.
+model RequestLog {
+  id         Int      @id @default(autoincrement())
+  method     String
+  path       String
+  status     Int
+  durationMs Int?
+  createdAt  DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([path])
+}
