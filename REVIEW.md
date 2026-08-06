@@ -75,8 +75,14 @@ forcing LF endings.
 `wait-for-it.sh` run for real against Postgres (detected the open port; exit 1 on a closed one with
 `--strict`); all seven container files store zero CR bytes.
 
-**⚠ NOT verified: `docker-compose up --build` has never run.** Docker is not installed on this
-machine. This is the single biggest untested area and the first task of the EC2 session.
+**Update 7 Aug: `docker-compose up --build` has now been run**, once Docker Desktop was installed.
+All three services came up clean on the first attempt — none of the five predicted first-run
+problems occurred. Verified live against the running containers: `/api/health` (DB connected),
+`/api/stats` (2 feeds / 1 author / 11 posts / 10 citations), `/feeds` and `/rss-client` both
+serving, a `docker-compose down && up` proving the named volume persists data (`No pending
+migrations to apply` in the logs on the second start, idempotent re-seed, identical counts), and
+`npx playwright test` 16/16 against the containerised stack. Full detail in `PLAN.md`'s "build-up
+to EC2" section. The only remaining Docker-related unknown is the actual EC2 instance itself.
 
 ---
 
@@ -110,13 +116,15 @@ machine. This is the single biggest untested area and the first task of the EC2 
 
 ## Still to do
 
-- [ ] **`docker-compose up --build`** — never run. EC2 session, first task.
-- [ ] `feature/api-docs-page` — the lab's API documentation page (curl + PowerShell) on the api
-      root. Not built; would strengthen the video.
-- [ ] Transcribe the full Lab 7a/7b breakdown into `assessment_2/PLAN.md` and
-      `VERIFICATION_CHECKLIST.md` (the master breakdown is in the session plan file).
-- [ ] Root `README.md` endpoint table needs updating to match what was actually built.
-- [ ] Merge to `main` and push — both deliberately left to you.
+All of the below were open when this file was first written (5 Aug); all are now done as of 7 Aug:
+
+- [x] `docker-compose up --build` — run, verified, see the update above
+- [x] `feature/api-docs-page` — built and merged
+- [x] Full Lab 7a/7b breakdown transcribed into `PLAN.md` and `VERIFICATION_CHECKLIST.md`
+- [x] Root `README.md` endpoint table updated
+- [x] Merged to `main` and pushed — `origin/main` matches local `main` exactly
+
+What's actually left now is EC2-specific: see "Remaining human tasks" in `assessment_2/PLAN.md`.
 
 ## How to run it right now
 
