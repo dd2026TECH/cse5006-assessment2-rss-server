@@ -25,6 +25,19 @@ export function apiBaseUrl(): string {
   return `${window.location.protocol}//${window.location.hostname}:${API_PORT}`;
 }
 
+/**
+ * Base URL for calls made **on the server** (server components, metadata).
+ *
+ * Inside Docker the frontend container reaches the api container by service
+ * name on its internal port — `http://api:3000` — which is the path the Module 7
+ * lab diagram shows. That never leaves the Docker network, so it cannot use the
+ * browser-facing hostname. docker-compose sets API_INTERNAL_URL; without it,
+ * local development falls back to the published port.
+ */
+export function serverApiBaseUrl(): string {
+  return (process.env.API_INTERNAL_URL ?? `http://localhost:${API_PORT}`).replace(/\/$/, "");
+}
+
 /** Absolute URL of a feed's RSS 2.0 document — the URL an RSS reader subscribes to. */
 export function feedUrl(slug: string): string {
   return `${apiBaseUrl()}/api/feeds/rss.xml?slug=${encodeURIComponent(slug)}`;

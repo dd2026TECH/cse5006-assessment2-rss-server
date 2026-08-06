@@ -1,0 +1,27 @@
+.status {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0.35rem 0 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.up {
+  background: #2e9e5b;
+}
+
+.down {
+  background: #c0392b;
+}
+
+.checking {
+  background: var(--border);
+}

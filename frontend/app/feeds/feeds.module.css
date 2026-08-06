@@ -2,3 +2,19 @@
   margin-top: 0.5rem;
   color: var(--text-muted);
 }
+
+.retry {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  background: var(--accent);
+  color: var(--on-accent);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.retry:hover {
+  background: var(--accent-strong);
+}

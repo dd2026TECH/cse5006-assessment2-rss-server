@@ -1,4 +1,5 @@
 import { siteConfig } from "@/lib/siteConfig";
+import ServerStatus from "./ServerStatus";
 import styles from "./Footer.module.css";
 
 export default function Footer() {
@@ -12,6 +13,7 @@ export default function Footer() {
         <p className={styles.meta}>
           {siteConfig.assessmentTitle} · {new Date().getFullYear()}
         </p>
+        <ServerStatus />
       </div>
     </footer>
   );
