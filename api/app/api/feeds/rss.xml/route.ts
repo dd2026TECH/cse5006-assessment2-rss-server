@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { corsHeaders, preflight, readId } from "@/lib/api";
+import { corsHeaders, preflight, readId, requestOrigin } from "@/lib/api";
 import { prisma } from "@/lib/prisma";
 
 // Republishes a feed as real RSS 2.0 so the RSS Client page — and any actual
@@ -53,8 +53,10 @@ export async function GET(request: NextRequest) {
   }
 
   // The public origin of this request, so <link> elements point somewhere real
-  // whether running on localhost or the EC2 public address.
-  const origin = request.nextUrl.origin;
+  // whether running on localhost or the EC2 public address. request.nextUrl.origin
+  // reflects the container's internal bind address (localhost:3000) rather than
+  // the Docker-published port the client actually used — see requestOrigin().
+  const origin = requestOrigin(request);
   const selfUrl = `${origin}/api/feeds/rss.xml?slug=${encodeURIComponent(feed.slug)}`;
 
   const items = feed.posts

@@ -39,8 +39,10 @@ never needs rebuilding when the EC2 instance's public DNS changes between sessio
 
 ## Running it
 
-Docker runs on an **AWS EC2 instance**, following Labs 7a/7b — not on a local Windows machine
-(no Docker installed there). The EC2 security group must allow inbound **80** and **4080**.
+Docker runs on an **AWS EC2 instance**, following Labs 7a/7b. Local development instead runs the
+`api` and `frontend` packages directly (see below) — Docker Desktop is installed locally too, and
+`docker-compose up --build` has been verified to work there, but EC2 is still where it's meant to
+run for submission. The EC2 security group must allow inbound **80** and **4080**.
 
 ```bash
 # on the EC2 box, after connecting with the *.pem key via VSCode Remote-SSH

@@ -80,6 +80,21 @@ export function readId(request: NextRequest): number | null | "invalid" {
   return Number.isInteger(parsed) && parsed > 0 ? parsed : "invalid";
 }
 
+/**
+ * The origin the client actually reached this server on. `request.nextUrl.origin`
+ * reflects the server's own bind address (e.g. `localhost:3000`, the port `next
+ * dev` listens on inside the container) rather than the address behind Docker's
+ * port mapping — so absolute URLs built from it are unreachable from outside the
+ * container. The `Host` header the client actually sent is reliable instead,
+ * since Docker's port mapping is a plain TCP NAT that leaves HTTP headers
+ * untouched.
+ */
+export function requestOrigin(request: NextRequest): string {
+  const host = request.headers.get("x-forwarded-host") ?? request.headers.get("host");
+  const proto = request.headers.get("x-forwarded-proto") ?? "http";
+  return host ? `${proto}://${host}` : request.nextUrl.origin;
+}
+
 /** Narrows an unknown thrown value to a Prisma error code, e.g. P2002/P2025. */
 export function prismaErrorCode(error: unknown): string | undefined {
   if (typeof error === "object" && error !== null && "code" in error) {
