@@ -8,13 +8,13 @@ test.describe("shell", () => {
     await page.goto("/");
     await expect(page.getByRole("banner")).toContainText("LMS on Cloud");
     await expect(page.getByRole("banner")).toContainText(
-      "CSE5006 Assessment 1",
+      siteConfig.assessmentTitle,
     );
     await expect(page.getByRole("contentinfo")).toContainText(
       siteConfig.studentName,
     );
     await expect(
-      page.getByRole("heading", { name: "How the RSS Server will work" }),
+      page.getByRole("heading", { name: "How the RSS Server works" }),
     ).toBeVisible();
   });
 

@@ -13,7 +13,7 @@ const pageLinks = [
   {
     href: "/feeds",
     title: "Feeds",
-    text: "Browse blog-style sample posts standing in for RSS content — search, scan and read.",
+    text: "Browse real posts served by the RSS Server's database — search, scan and read.",
   },
   {
     href: "/settings",
@@ -32,7 +32,7 @@ const workflow = [
   {
     step: 1,
     title: "Source",
-    text: "The RSS Server collects content from external RSS feeds (backend arrives in Assessment 2).",
+    text: "The RSS Server holds feeds and posts in a Postgres database behind Prisma, served through CRUD and RSS APIs.",
   },
   {
     step: 2,
@@ -73,11 +73,11 @@ export default function Home() {
       </section>
 
       <section aria-labelledby="workflow-heading" className={styles.section}>
-        <h2 id="workflow-heading">How the RSS Server will work</h2>
+        <h2 id="workflow-heading">How the RSS Server works</h2>
         <p className={styles.sectionLede}>
-          Assessment 1 builds the interface; the pipeline below shows how
-          content will flow from RSS feeds into the LMS as later assessments
-          add the backend.
+          Assessment 2 built the backend behind this interface — the pipeline
+          below shows how content actually flows from the database to what
+          you see.
         </p>
         <ol className={styles.workflow}>
           {workflow.map(({ step, title, text }) => (

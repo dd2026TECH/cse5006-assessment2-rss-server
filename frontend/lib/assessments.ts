@@ -35,9 +35,9 @@ export const assessments: Assessment[] = [
     slug: "assessment-2",
     title: "Backend, API & database",
     weight: "25%",
-    status: "upcoming",
+    status: "in progress",
     summary:
-      "Introduces the real RSS Server: a database-backed API that the frontend built in Assessment 1 will read through, plus an RSS Client that receives the feeds it serves.",
+      "Introduces the real RSS Server: a database-backed API that the frontend built in Assessment 1 reads through, plus an RSS Client that receives the feeds it serves.",
     adds: [
       "Prisma models and migrations for feeds, authors and posts",
       "CRUD APIs with validation, status codes and a health endpoint",

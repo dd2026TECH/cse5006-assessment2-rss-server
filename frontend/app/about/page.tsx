@@ -28,11 +28,11 @@ export default function AboutPage() {
         </p>
         <p>
           The content the LMS delivers comes from an <strong>RSS Server</strong>:
-          a system that collects content from RSS feeds and organises it into
-          readable posts for learners. This part of the build, Assessment 1,
-          is the interface that will eventually display that content —
-          focused on making it easy to navigate, scan, and read on any
-          device.
+          a Postgres database behind Prisma, CRUD and operational APIs, and a
+          real RSS 2.0 feed. Assessment 1 built the interface — focused on
+          making content easy to navigate, scan, and read on any device;
+          Assessment 2 built the server behind it, so what you see now is
+          real, database-driven content rather than a stand-in.
         </p>
       </section>
 
@@ -57,18 +57,19 @@ export default function AboutPage() {
       <section aria-labelledby="scope-heading" className={styles.section}>
         <h2 id="scope-heading">Current scope</h2>
         <p className={styles.callout}>
-          <strong>Assessment 1 is frontend only.</strong> No RSS content is
-          fetched and no backend processing happens yet — the posts on the
-          Feeds page are blog-style sample content standing in for real feed
-          data.
+          <strong>Assessment 2 is live.</strong> The RSS Server — Postgres
+          behind Prisma, CRUD and operational APIs, and a real RSS 2.0 feed —
+          is running behind this interface. The Feeds page reads real posts
+          from the database through the API; the RSS Client page fetches a
+          live feed over HTTP and parses the actual XML, the same way any
+          real feed reader would.
         </p>
         <p>
-          In Assessment 2, the server component is introduced and the
-          application gains the ability to accept and process live RSS
-          content. The Feeds page already reads its data through a single
-          access function, so swapping in the real backend will not require
-          interface changes. Later assessments connect the pipeline through to
-          the LMS.
+          The Feeds page always read its data through a single access
+          function, so swapping in the real backend for Assessment 2 required
+          no interface changes — the point of building it that way from the
+          start. Later assessments add dashboards, alerts, reporting, and a
+          cloud deployment on top of this same system.
         </p>
       </section>
 
@@ -85,7 +86,7 @@ export default function AboutPage() {
         </p>
         <p>
           <a
-            href="https://github.com/dd2026TECH/cse5006-assessment1-rss-server"
+            href="https://github.com/dd2026TECH/cse5006-assessment2-rss-server"
             target="_blank"
             rel="noopener noreferrer"
           >
