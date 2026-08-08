@@ -11,6 +11,7 @@ import {
 } from "@/lib/preferences";
 import PostCard from "./PostCard";
 import AddFeedDialog from "./AddFeedDialog";
+import ManageFeeds from "./ManageFeeds";
 import styles from "./FeedsView.module.css";
 
 export default function FeedsView({ posts }: { posts: Post[] }) {
@@ -129,6 +130,8 @@ export default function FeedsView({ posts }: { posts: Post[] }) {
         onClose={() => setDialogOpen(false)}
         onAdd={(feed) => setSavedFeeds([...savedFeeds, feed])}
       />
+
+      <ManageFeeds />
 
       <p className={styles.count} role="status">
         {filtered.length === posts.length
