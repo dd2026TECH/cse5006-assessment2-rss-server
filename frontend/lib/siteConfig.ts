@@ -3,11 +3,11 @@
 
 export const siteConfig = {
   siteName: "LMS on Cloud — Web Application Build",
-  assessmentTitle: "CSE5006 Assessment 1 — Frontend Design & Usability",
+  assessmentTitle: "CSE5006 Assessment 2 — Backend, API & Database",
   studentName: "Xueting Denise Chin",
   studentId: "22663637",
   description:
-    "A Learning Management System delivered on the cloud, built as a web application across four assessed parts — documented from a student's perspective so other students can see exactly how it was built. This part (Assessment 1) is the frontend; the RSS Server is the content engine that will feed the LMS once the backend arrives.",
+    "A Learning Management System delivered on the cloud, built as a web application across four assessed parts — documented from a student's perspective so other students can see exactly how it was built. This part (Assessment 2) is the RSS Server: a Postgres database behind Prisma, CRUD and operational APIs, and an RSS Client — everything the Assessment 1 frontend now runs against instead of hardcoded sample data.",
   nav: [
     { href: "/", label: "Home" },
     { href: "/about", label: "About" },
