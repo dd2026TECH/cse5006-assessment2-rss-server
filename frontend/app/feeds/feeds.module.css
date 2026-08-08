@@ -1,3 +1,27 @@
+.headerRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.newPostLink {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.newPostLink:hover {
+  background: var(--accent-strong);
+}
+
 .lede {
   margin-top: 0.5rem;
   color: var(--text-muted);

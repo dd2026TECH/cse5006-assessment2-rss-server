@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Suspense } from "react";
 import { getPosts } from "@/lib/posts";
 import Breadcrumbs from "@/components/Breadcrumbs";
@@ -23,7 +24,12 @@ export default function FeedsPage() {
   return (
     <section>
       <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Feeds" }]} />
-      <h1>Feeds</h1>
+      <div className={styles.headerRow}>
+        <h1>Feeds</h1>
+        <Link href="/feeds/new" className={styles.newPostLink}>
+          + New post
+        </Link>
+      </div>
       <p className={styles.lede}>
         Live RSS feed items, read from the RSS Server&apos;s database through its
         API. Newest first.
