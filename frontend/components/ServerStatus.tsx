@@ -72,8 +72,8 @@ export default function ServerStatus() {
       {status.phase === "down" && "RSS Server unreachable"}
       {status.phase === "up" && (
         <>
-          RSS Server online · {status.requests.toLocaleString()} requests served ·{" "}
-          {status.latencyMs}ms database
+          RSS Server online · /api/health: {status.latencyMs}ms database ·{" "}
+          /api/count: {status.requests.toLocaleString()} requests served
         </>
       )}
     </p>

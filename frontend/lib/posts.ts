@@ -12,6 +12,12 @@
 import { serverApiBaseUrl } from "./apiConfig";
 
 export type PostCategory = "Announcements" | "Learning" | "Theming" | "Research";
+export const POST_CATEGORIES: PostCategory[] = [
+  "Announcements",
+  "Learning",
+  "Theming",
+  "Research",
+];
 
 /** A citation's exact substring in `body` paired with the real URL it should link to. */
 export type Citation = { text: string; href: string };
@@ -26,6 +32,7 @@ export type Post = {
   date: string; // ISO 8601
   imageUrl: string;
   imageAlt: string; // every image gets a real text alternative (WCAG)
+  link: string; // external source URL, if any
   source: string; // name of the feed this item came from
   category: PostCategory;
   citations?: Citation[];
@@ -40,6 +47,7 @@ type ApiPost = {
   body: string[];
   imageUrl: string | null;
   imageAlt: string | null;
+  link: string | null;
   category: string | null;
   publishedAt: string;
   author: { name: string };
@@ -47,10 +55,8 @@ type ApiPost = {
   citations: Citation[];
 };
 
-const CATEGORIES: PostCategory[] = ["Announcements", "Learning", "Theming", "Research"];
-
 function toPost(row: ApiPost): Post {
-  const category = CATEGORIES.includes(row.category as PostCategory)
+  const category = POST_CATEGORIES.includes(row.category as PostCategory)
     ? (row.category as PostCategory)
     : "Announcements";
 
@@ -64,6 +70,7 @@ function toPost(row: ApiPost): Post {
     date: row.publishedAt,
     imageUrl: row.imageUrl ?? "",
     imageAlt: row.imageAlt ?? "",
+    link: row.link ?? "",
     source: row.feed.name,
     category,
     citations: row.citations.length > 0 ? row.citations : undefined,

@@ -128,12 +128,26 @@ from the request itself, so the commands it shows always work as written.
 
 ## Frontend pages added or changed in Assessment 2
 
-- **`/feeds`** and **`/feeds/[slug]`** — now read live from the database via `getPosts()` /
+- **`/feeds`** and **`/feeds/[slug]`** — read live from the database via `getPosts()` /
   `getPostBySlug()` in `frontend/lib/posts.ts`, instead of a hardcoded array. Loading state via
-  `Suspense`; error state via `frontend/app/feeds/error.tsx` if the API is unreachable.
+  `Suspense`; error state via `frontend/app/feeds/error.tsx` if the API is unreachable. Every post's
+  own page (`/feeds/[slug]`) has **Edit** and **Delete** buttons (`PostDetail.tsx`) — editing swaps
+  in `PostForm.tsx`, which `PATCH`es `/api/posts?id=` directly; delete confirms then `DELETE`s and
+  returns to `/feeds`. Visible to everyone — there is no login system, so a fake "admin only" gate
+  would be dishonest UI.
+- **`/feeds/new`** — publishes a brand-new post (`PostForm.tsx` in create mode): picks an existing
+  feed/author from a dropdown, or "+ Add new…" to create one inline first. `POST`s to `/api/posts`
+  (and `/api/feeds` / `/api/authors` first, if a new one was created) and lands on the new post's
+  page.
 - **`/rss-client`** — fetches a feed's RSS 2.0 document over HTTP and renders it, the way a real
   reader would. Shows the feed URL on screen and a raw-XML toggle.
-- **Footer** — a live status line (`ServerStatus`) polling `/api/health` and `/api/count`.
+- **Footer** — a live status line (`ServerStatus`) explicitly naming both operational endpoints:
+  `/api/health: {latency}ms · /api/count: {n} requests`.
+
+There is no longer a separate `/admin` page — it only ever managed feed metadata (name/url/
+description), not the actual content. Feed/author CRUD still exists at the API level
+(`/api/feeds`, `/api/authors`), it's just reached through the "+ Add new…" flow above instead of a
+standalone admin panel.
 
 ## Testing
 
@@ -156,5 +170,6 @@ RSS Client against the live server. Requires the `api` package running on `:4080
 - [x] Frontend wired to the API — `getPosts()`/`getPostBySlug()` read the database; 16/16
       Playwright tests pass
 - [x] RSS Client page — fetches and renders real RSS 2.0; validated with a real XML parser
-- [ ] Dockerfiles and `docker-compose.yml` written per the Module 7 lab, **not yet run** — no
-      Docker on this development machine; first task of the EC2 session
+- [x] Dockerfiles and `docker-compose.yml`, per the Module 7 lab structure — running on EC2
+- [x] Full post CRUD (Create/Update/Delete) reachable from the UI on `/feeds/[slug]` and
+      `/feeds/new`, not just the API — verified live end to end on EC2
