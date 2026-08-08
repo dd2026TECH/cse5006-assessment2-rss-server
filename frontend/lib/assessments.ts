@@ -2,7 +2,7 @@
 // assessment-N pages, the Home explore grid, and the About page's
 // "the four parts" section — a single place to update as later parts land.
 
-export type AssessmentStatus = "in progress" | "upcoming";
+export type AssessmentStatus = "complete" | "in progress" | "upcoming";
 
 export interface Assessment {
   number: 1 | 2 | 3 | 4;
@@ -20,7 +20,7 @@ export const assessments: Assessment[] = [
     slug: "assessment-1",
     title: "Frontend design & usability",
     weight: "20%",
-    status: "in progress",
+    status: "complete",
     summary:
       "Designs and builds the LMS frontend itself: the pages, the light/dark theme system, the responsive navigation and hamburger menu, and the interactive feeds library — all written up here so another student could follow the same build.",
     adds: [

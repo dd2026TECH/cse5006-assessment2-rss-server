@@ -34,6 +34,11 @@
   color: var(--accent);
 }
 
+.statusComplete {
+  background: color-mix(in srgb, #2e9e5b 18%, transparent);
+  color: #2e9e5b;
+}
+
 .statusUpcoming {
   background: var(--surface-2);
   color: var(--text-muted);

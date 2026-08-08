@@ -11,9 +11,11 @@ export default function AssessmentOverview({
   assessment: Assessment;
 }) {
   const statusClass =
-    assessment.status === "in progress"
-      ? styles.statusInProgress
-      : styles.statusUpcoming;
+    assessment.status === "complete"
+      ? styles.statusComplete
+      : assessment.status === "in progress"
+        ? styles.statusInProgress
+        : styles.statusUpcoming;
 
   return (
     <article className={styles.overview}>
