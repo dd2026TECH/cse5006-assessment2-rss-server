@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { siteConfig } from "@/lib/siteConfig";
 import { assessments } from "@/lib/assessments";
-import HowToVideo from "@/components/HowToVideo";
+import VideoEmbed from "@/components/VideoEmbed";
 import styles from "./about.module.css";
 
 export const metadata: Metadata = {
@@ -101,7 +101,10 @@ export default function AboutPage() {
           The short video below walks through the site: navigating between
           pages, switching themes, and browsing the feeds.
         </p>
-        <HowToVideo />
+        <VideoEmbed
+          src="/videos/how-to.mp4"
+          title="Video walkthrough of how to use this website"
+        />
       </section>
 
       <section aria-labelledby="author-heading" className={styles.section}>

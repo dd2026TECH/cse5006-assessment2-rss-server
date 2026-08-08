@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import VideoEmbed from "@/components/VideoEmbed";
 import { getAssessment } from "@/lib/assessments";
 import styles from "./assessment-1.module.css";
 
@@ -41,6 +42,16 @@ export default function Assessment1Page() {
             <li key={item}>{item}</li>
           ))}
         </ul>
+      </section>
+
+      <section aria-labelledby="video-heading" className={styles.section}>
+        <h2 id="video-heading">Demo video</h2>
+        <p>The submitted walkthrough of Assessment 1, in full.</p>
+        <VideoEmbed
+          src="https://www.youtube.com/embed/oe_mQ0RZq4k"
+          title="Assessment 1 demonstration video"
+          href="https://youtu.be/oe_mQ0RZq4k"
+        />
       </section>
 
       <nav className={styles.links} aria-label="Related pages">
