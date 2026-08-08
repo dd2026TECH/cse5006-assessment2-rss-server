@@ -21,7 +21,11 @@ export default function Assessment1Page() {
       </div>
       <p className={styles.weight}>
         {assessment.weight} of the overall grade ·{" "}
-        <span className={styles.status}>{assessment.status}</span>
+        <span
+          className={`${styles.status} ${assessment.status === "complete" ? styles.statusComplete : ""}`}
+        >
+          {assessment.status}
+        </span>
       </p>
 
       <section aria-labelledby="what-heading" className={styles.section}>
