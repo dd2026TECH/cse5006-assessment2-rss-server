@@ -42,9 +42,9 @@ export default function Assessment2Page() {
         <h2 id="video-heading">Demo video</h2>
         <p>The submitted walkthrough of Assessment 2, in full.</p>
         <VideoEmbed
-          src="https://www.youtube.com/embed/OrXWekVX8wQ"
+          src="https://www.youtube.com/embed/4h8JMfINKFI"
           title="Assessment 2 demonstration video"
-          href="https://youtu.be/OrXWekVX8wQ"
+          href="https://youtu.be/4h8JMfINKFI"
         />
       </section>
 
